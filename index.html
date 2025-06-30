@@ -1,42 +1,46 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title>Export FVE</title>
-    <style>
-      body {
-        font-family: sans-serif;
-        text-align: center;
-        padding-top: 50px;
-        background-color: #f5f5f5;
-      }
-      .icon {
-        font-size: 100px;
-      }
-      .green {
-        color: #00cc00;  /* jasná zelená */
-      }
-      .red {
-        color: #ff0000;  /* skutečně červená */
-      }
-    </style>
-    <script>
-      window.onload = function() {
-        const stav = document.getElementById("ano").textContent.trim().toUpperCase();
-        const icon = document.getElementById("stav-ikona");
+<html lang="cs">
+<head>
+  <meta charset="UTF-8" />
+  <title>Stav FVE Exportu</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      padding-top: 50px;
+      background-color: #f5f5f5;
+    }
+    .icon {
+      font-size: 100px;
+    }
+    .green {
+      color: #00cc00;
+    }
+    .red {
+      color: #ff0000;
+    }
+  </style>
+  <script>
+    async function nacistStav() {
+      try {
+        const odpoved = await fetch("param.json");
+        const data = await odpoved.json();
+        const stav = data.stav.trim().toUpperCase();
 
-        if (stav === "ANO") {
-          icon.innerHTML = "💡";
-          icon.classList.add("green");
-        } else {
-          icon.innerHTML = "💡";
-          icon.classList.add("red");
-        }
+        document.getElementById("text").textContent = stav;
+
+        const icon = document.getElementById("ikona");
+        icon.innerHTML = "💡";
+        icon.className = "icon " + (stav === "ANO" ? "green" : "red");
+      } catch (e) {
+        console.error("Chyba při načítání JSON:", e);
       }
-    </script>
-  </head>
-  <body>
-    <h1 id="ano">NE</h1>
-    <div id="stav-ikona" class="icon">💡</div>
-  </body>
+    }
+    window.onload = nacistStav;
+  </script>
+</head>
+<body>
+  <h1 id="text">Načítání…</h1>
+  <div id="ikona" class="icon">💡</div>
+</body>
 </html>
