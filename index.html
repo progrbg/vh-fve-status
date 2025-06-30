@@ -14,10 +14,10 @@
       font-size: 100px;
     }
     .green {
-      color: #00cc00;
+      color: green;
     }
     .red {
-      color: #ff0000;
+      color: red;
     }
   </style>
   <script>
@@ -27,15 +27,26 @@
         const data = await odpoved.json();
         const stav = data.stav.trim().toUpperCase();
 
-        document.getElementById("text").textContent = stav;
+        const text = document.getElementById("text");
+        const ikona = document.getElementById("ikona");
 
-        const icon = document.getElementById("ikona");
-        icon.innerHTML = "💡";
-        icon.className = "icon " + (stav === "ANO" ? "green" : "red");
+        text.textContent = stav;
+
+        // Odstraníme předchozí barvy
+        ikona.classList.remove("green", "red");
+
+        // Nastavíme barvu podle stavu
+        if (stav === "ANO") {
+          ikona.classList.add("green");
+        } else {
+          ikona.classList.add("red");
+        }
+
       } catch (e) {
-        console.error("Chyba při načítání JSON:", e);
+        console.error("Chyba při načítání param.json:", e);
       }
     }
+
     window.onload = nacistStav;
   </script>
 </head>
